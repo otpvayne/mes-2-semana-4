@@ -1,35 +1,114 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mi Finanzas — Control de Gastos</title>
-  <link rel="stylesheet" href="/control-gastos/css/style.css" />
+  <title>Mis Finanzas</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main class="container">
-    <header class="header">
-      <h1>Mi Finanzas</h1>
-      <p class="subtitle">Control simple de ingresos y gastos</p>
-      <div class="balance">
-        <div class="balance__label">Saldo</div>
-        <div id="balance" class="balance__value">0.00</div>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header__bar">
+        <div>
+          <h1 class="h1">Mis Finanzas</h1>
+          <p class="muted">Gestiona tus ingresos y gastos de forma sencilla</p>
+        </div>
+        <button id="themeToggle" class="btn btn--ghost" aria-label="Cambiar tema">
+          <span id="themeLabel">🌙</span>
+        </button>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <section class="controls">
-      <!-- form y resumen -->
+  <main class="container">
+    <!-- Balance -->
+    <section id="balanceCard" class="card card--center mb-lg">
+      <h2 class="h4 muted">Balance Total</h2>
+      <div id="balanceValue" class="balance-value">€ 0,00</div>
+      <p id="balanceNote" class="muted">Tienes un balance positivo</p>
     </section>
 
-    <section class="history">
-      <!-- historial -->
+    <!-- Mobile layout -->
+    <section class="only-mobile stack md-hidden">
+      <section id="summaryCard" class="card">
+        <h3 class="h3 mb">Resumen</h3>
+
+        <div class="pill pill--green">
+          <div class="pill__left">
+            <svg class="icon icon--green" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="sm">Ingresos Totales</span>
+          </div>
+          <span id="totalIncomeMobile" class="sm green">€ 0,00</span>
+        </div>
+
+        <div class="pill pill--red">
+          <div class="pill__left">
+            <svg class="icon icon--red" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 7l-6 6-4-4-8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="sm">Gastos Totales</span>
+          </div>
+          <span id="totalExpensesMobile" class="sm red">€ 0,00</span>
+        </div>
+
+        <div class="mt">
+          <button id="clearBtnMobile" class="btn btn--destructive w-full">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6l1-2h6l1 2M6 6l1 14h10l1-14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Limpiar Datos
+          </button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3 class="h3 mb">Agregar Transacción</h3>
+        <form id="txForm" class="form">
+          <label for="desc">Descripción</label>
+          <input id="desc" type="text" placeholder="Ej: Salario, Compras, etc." required>
+
+          <label for="amount">Monto</label>
+          <input id="amount" type="number" step="0.01" placeholder="+ ingresos, - gastos" required>
+          <p class="help">Valores positivos para ingresos, negativos para gastos</p>
+
+          <label for="date">Fecha (opcional)</label>
+          <input id="date" type="date">
+
+          <button class="btn w-full">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Agregar
+          </button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h3 class="h3 mb">Historial</h3>
+        <div id="historyMobile" class="history"></div>
+        <div id="emptyMobile" class="empty muted">No hay transacciones aún<br><span class="sm">Agrega tu primera transacción</span></div>
+      </section>
     </section>
 
-    <footer class="footer">
-      <small>&copy; 2025 Tu Nombre</small>
-    </footer>
-  </main>
+    <!-- Desktop grid -->
+    <section class="grid-3 lg-visible">
+      <div class="col-span-2 stack">
+        <section class="card">
+          <h3 class="h3 mb">Agregar Transacción</h3>
+          <form id="txFormDesktop" class="form">
+            <label for="descD">Descripción</label>
+            <input id="descD" type="text" placeholder="Ej: Salario, Compras, etc." required>
 
-  <script src="/control-gastos/js/app.js"></script>
-</body>
-</html>
+            <label for="amountD">Monto</label>
+            <input id="amountD" type="number" step="0.01" placeholder="+ ingresos, - gastos" required>
+            <p class="help">Valores positivos para ingresos, negativos para gastos</p>
+
+            <label for="dateD">Fecha (opcional)</label>
+            <input id="dateD" type="date">
+
+            <button class="btn w-full">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Agregar
+            </button>
+          </form>
+        </section>
+
+        <section class="card">
+          <h3 class="h3 mb">Historial</h3>
+          <div id="hi

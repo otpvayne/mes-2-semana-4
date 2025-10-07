@@ -77,6 +77,55 @@
             Agregar
           </button>
         </form>
+        <!-- ... -->
+<form id="txForm" class="form" novalidate>
+  <label for="desc">Descripción</label>
+  <input id="desc" type="text" placeholder="Ej: Salario, Compras, etc." required>
+  <div id="err-desc" class="field-error" aria-live="polite"></div>
+
+  <label for="amount">Monto</label>
+  <input id="amount" type="number" step="0.01" inputmode="decimal" placeholder="+ ingresos, - gastos" required>
+  <p class="help">Valores positivos para ingresos, negativos para gastos</p>
+  <div id="err-amount" class="field-error" aria-live="polite"></div>
+
+  <label for="date">Fecha (opcional)</label>
+  <input id="date" type="date" max="">
+  <div id="err-date" class="field-error" aria-live="polite"></div>
+
+  <button class="btn w-full" data-loading-target="add-mobile">
+    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>Agregar</span>
+  </button>
+  <div id="err-global-m" class="form-error-global" aria-live="assertive"></div>
+</form>
+<!-- ... -->
+
+<form id="txFormDesktop" class="form" novalidate>
+  <label for="descD">Descripción</label>
+  <input id="descD" type="text" placeholder="Ej: Salario, Compras, etc." required>
+  <div id="err-descD" class="field-error" aria-live="polite"></div>
+
+  <label for="amountD">Monto</label>
+  <input id="amountD" type="number" step="0.01" inputmode="decimal" placeholder="+ ingresos, - gastos" required>
+  <p class="help">Valores positivos para ingresos, negativos para gastos</p>
+  <div id="err-amountD" class="field-error" aria-live="polite"></div>
+
+  <label for="dateD">Fecha (opcional)</label>
+  <input id="dateD" type="date" max="">
+  <div id="err-dateD" class="field-error" aria-live="polite"></div>
+
+  <button class="btn w-full" data-loading-target="add-desktop">
+    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>Agregar</span>
+  </button>
+  <div id="err-global-d" class="form-error-global" aria-live="assertive"></div>
+</form>
+<!-- ... -->
+
+<!-- Botones limpiar ya existen; añade data-loading-target para spinner -->
+<button id="clearBtnMobile" class="btn btn--destructive w-full" data-loading-target="clear-mobile">…</button>
+<button id="clearBtnDesktop" class="btn btn--destructive w-full" data-loading-target="clear-desktop">…</button>
+
       </section>
 
       <section class="card">

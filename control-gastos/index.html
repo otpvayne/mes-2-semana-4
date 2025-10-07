@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Mis Finanzas</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/control-gastos/css/style.css">
 </head>
 <body>
   <!-- Header -->
@@ -111,4 +111,43 @@
 
         <section class="card">
           <h3 class="h3 mb">Historial</h3>
-          <div id="hi
+          <div id="historyDesktop" class="history"></div>
+          <div id="emptyDesktop" class="empty muted">No hay transacciones aún<br><span class="sm">Agrega tu primera transacción</span></div>
+        </section>
+      </div>
+
+      <section class="card">
+        <h3 class="h3 mb">Resumen</h3>
+
+        <div class="pill pill--green">
+          <div class="pill__left">
+            <svg class="icon icon--green" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="sm">Ingresos Totales</span>
+          </div>
+          <span id="totalIncomeDesktop" class="sm green">€ 0,00</span>
+        </div>
+
+        <div class="pill pill--red">
+          <div class="pill__left">
+            <svg class="icon icon--red" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 7l-6 6-4-4-8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="sm">Gastos Totales</span>
+          </div>
+          <span id="totalExpensesDesktop" class="sm red">€ 0,00</span>
+        </div>
+
+        <div class="mt">
+          <button id="clearBtnDesktop" class="btn btn--destructive w-full">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6l1-2h6l1 2M6 6l1 14h10l1-14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Limpiar Datos
+          </button>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <!-- Toast simple -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="/control-gastos/js/app.js" defer></script>
+</body>
+</html>

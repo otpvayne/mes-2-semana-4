@@ -158,3 +158,47 @@ input{
   z-index:50;max-width:90%;font-size:.9rem;
 }
 .toast--show{opacity:1;transform:translateX(-50%) translateY(-6px)}
+/* === Validación / Errores === */
+.field-error{
+  min-height:1.1rem;
+  font-size:.8rem;
+  color:var(--red);
+  margin-top:.15rem;
+}
+.input--invalid{ border-color: var(--red); background: color-mix(in srgb, var(--red-50) 35%, transparent); }
+.shake{
+  animation: shake .22s linear 2;
+}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-3px)}
+  75%{transform:translateX(3px)}
+}
+.form-error-global{
+  margin-top:.5rem;
+  color:var(--red);
+  font-weight:600;
+  display:block;
+}
+
+/* === Botón con loading === */
+.btn[aria-busy="true"]{
+  position:relative;
+  pointer-events:none;
+  opacity:.85;
+}
+.btn[aria-busy="true"] > .icon{ visibility:hidden; }
+.btn[aria-busy="true"]::after{
+  content:"";
+  position:absolute; right:12px; width:16px; height:16px;
+  border-radius:50%;
+  border:2px solid currentColor; border-top-color: transparent;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin{ to{ transform: rotate(360deg); } }
+
+/* === Mejora táctil móvil === */
+@media (max-width:480px){
+  input, .btn{ padding:.8rem 1rem; }
+  .balance-value{ font-size:2.25rem; }
+}

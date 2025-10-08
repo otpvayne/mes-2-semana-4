@@ -25,10 +25,37 @@ function showToast(msg) {
   setTimeout(() => el.classList.remove('toast--show'), 1600);
 }
 
+// Errores por campo / global y loading en botones
+function setFieldError(input, msg){
+  const id = input.id;
+  const errEl = document.getElementById(`err-${id}`);
+  if(errEl){ errEl.textContent = msg || ""; }
+  input.classList.toggle('input--invalid', Boolean(msg));
+  if(msg){ input.classList.add('shake'); setTimeout(()=>input.classList.remove('shake'), 350); }
+}
+function clearFieldErrors(suffix){
+  ['desc','amount','date','descD','amountD','dateD'].forEach(k=>{
+    const el = document.getElementById(k);
+    if(!el) return;
+    if(suffix && !k.endsWith(suffix)) return;
+    setFieldError(el, "");
+  });
+}
+function setGlobalError(scope, msg){
+  const id = scope === 'desktop' ? 'err-global-d' : 'err-global-m';
+  const el = document.getElementById(id);
+  if(el) el.textContent = msg || '';
+}
+function setButtonLoading(btn, isLoading){
+  if(!btn) return;
+  btn.setAttribute('aria-busy', isLoading ? 'true' : 'false');
+  btn.disabled = !!isLoading;
+}
+
 // ===== Estado =====
 let transactions = [];
 
-// Cargar estado
+// Cargar/guardar estado
 function load() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -131,6 +158,53 @@ function renderAll(){
   renderHistory();
 }
 
+// ===== Validaciones =====
+function validateTx({description, amount, date}){
+  const errors = {};
+  const descMin = 3, descMax = 80;
+
+  // Descripción
+  if(!description || !description.trim()){
+    errors.desc = "La descripción es obligatoria.";
+  } else if(description.trim().length < descMin){
+    errors.desc = `Mínimo ${descMin} caracteres.`;
+  } else if(description.trim().length > descMax){
+    errors.desc = `Máximo ${descMax} caracteres.`;
+  }
+
+  // Monto
+  if(amount === "" || amount === null || amount === undefined){
+    errors.amount = "El monto es obligatorio.";
+  } else {
+    const num = Number(amount);
+    if(!Number.isFinite(num)){
+      errors.amount = "Monto inválido.";
+    } else if(num === 0){
+      errors.amount = "El monto no puede ser 0.";
+    } else {
+      // Máx 2 decimales
+      const parts = String(amount).split('.');
+      if(parts[1] && parts[1].length > 2){
+        errors.amount = "Máximo 2 decimales.";
+      }
+      // Límite razonable
+      if(Math.abs(num) > 1_000_000_000){
+        errors.amount = "Monto excesivo.";
+      }
+    }
+  }
+
+  // Fecha (opcional) no futura
+  if(date){
+    const d = new Date(date + 'T00:00:00');
+    const today = new Date(); today.setHours(0,0,0,0);
+    if(isNaN(d.getTime())) errors.date = "Fecha inválida.";
+    else if(d > today) errors.date = "La fecha no puede ser futura.";
+  }
+
+  return { valid: Object.keys(errors).length === 0, errors };
+}
+
 // ===== Acciones =====
 function addTransaction({description, amount, date}) {
   const numeric = parseFloat(amount);
@@ -156,30 +230,88 @@ function clearAll(){
   showToast('Todos los datos han sido eliminados');
 }
 
+function addTransactionValidated({description, amount, date}, scope, submitBtn){
+  const {valid, errors} = validateTx({description, amount, date});
+  // pinta errores por scope
+  const suffix = scope === 'desktop' ? 'D' : '';
+  setGlobalError(scope, "");
+  clearFieldErrors(suffix);
+
+  // Asigna errores por campo
+  const descInput = document.getElementById('desc'+suffix);
+  const amountInput = document.getElementById('amount'+suffix);
+  const dateInput = document.getElementById('date'+suffix);
+  if(errors.desc)   setFieldError(descInput, errors.desc);
+  if(errors.amount) setFieldError(amountInput, errors.amount);
+  if(errors.date)   setFieldError(dateInput, errors.date);
+
+  if(!valid){
+    setGlobalError(scope, "Revisa los campos marcados en rojo.");
+    (errors.desc ? descInput : (errors.amount ? amountInput : dateInput)).focus();
+    return;
+  }
+
+  // Loading breve para feedback visual
+  setButtonLoading(submitBtn, true);
+  setTimeout(()=>{
+    addTransaction({description, amount, date});
+    setButtonLoading(submitBtn, false);
+  }, 350);
+}
+
+function clearAllWithFeedback(btn){
+  setButtonLoading(btn, true);
+  setTimeout(()=>{
+    clearAll();
+    setButtonLoading(btn, false);
+  }, 300);
+}
+
 // ===== Formularios (mobile y desktop) =====
 function wireForm(formEl, ids){
   const desc = $('#'+ids.desc);
   const amount = $('#'+ids.amount);
   const date = $('#'+ids.date);
+  const btn = formEl.querySelector('button[type="submit"], .btn');
 
-  // fecha default hoy
-  date.value = new Date().toISOString().split('T')[0];
+  // fecha default hoy + limitar futuro
+  const todayStr = new Date().toISOString().split('T')[0];
+  date.value = todayStr;
+  date.max = todayStr;
+
+  // Limpia error al tipear y al salir
+  [desc, amount, date].forEach(inp=>{
+    inp.addEventListener('input', ()=> setFieldError(inp, ""));
+    inp.addEventListener('blur', ()=> setFieldError(inp, ""));
+  });
+
+  // Evita Enter que dispara submit desde inputs
+  formEl.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter' && e.target.tagName === 'INPUT') e.preventDefault();
+  });
 
   formEl.addEventListener('submit', (e)=>{
     e.preventDefault();
-    if(!desc.value.trim() || !amount.value.trim()) return;
-
-    addTransaction({
+    addTransactionValidated({
       description: desc.value,
       amount: amount.value,
       date: date.value
-    });
+    }, ids.desc.endsWith('D') ? 'desktop' : 'mobile', btn);
 
+    // Reset básico tras intento
     desc.value = '';
     amount.value = '';
-    date.value = new Date().toISOString().split('T')[0];
+    date.value = todayStr;
     desc.focus();
   });
+}
+
+// Botones limpiar con feedback
+function wireClearButtons(){
+  const m = $('#clearBtnMobile');
+  const d = $('#clearBtnDesktop');
+  m.addEventListener('click', ()=> clearAllWithFeedback(m));
+  d.addEventListener('click', ()=> clearAllWithFeedback(d));
 }
 
 // ===== Tema oscuro =====
@@ -201,14 +333,9 @@ function initTheme(){
 // ===== Inicio =====
 load();
 document.addEventListener('DOMContentLoaded', ()=>{
-  // Forms
   wireForm($('#txForm'),        {desc:'desc',  amount:'amount',  date:'date'});
   wireForm($('#txFormDesktop'), {desc:'descD', amount:'amountD', date:'dateD'});
-
-  // Clear buttons
-  $('#clearBtnMobile').addEventListener('click', clearAll);
-  $('#clearBtnDesktop').addEventListener('click', clearAll);
-
+  wireClearButtons();
   initTheme();
   renderAll();
 });

@@ -201,3 +201,6 @@ input{
   input, .btn{ padding:.8rem 1rem; }
   .balance-value{ font-size:2.25rem; }
 }
+body.dark .btn--add {
+  color: #000;
+}

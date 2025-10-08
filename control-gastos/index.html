@@ -32,12 +32,15 @@
 
     <!-- Mobile layout -->
     <section class="only-mobile stack md-hidden">
+      <!-- Resumen -->
       <section id="summaryCard" class="card">
         <h3 class="h3 mb">Resumen</h3>
 
         <div class="pill pill--green">
           <div class="pill__left">
-            <svg class="icon icon--green" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="icon icon--green" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 17l6-6 4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
             <span class="sm">Ingresos Totales</span>
           </div>
           <span id="totalIncomeMobile" class="sm green">€ 0,00</span>
@@ -45,89 +48,52 @@
 
         <div class="pill pill--red">
           <div class="pill__left">
-            <svg class="icon icon--red" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 7l-6 6-4-4-8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="icon icon--red" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M21 7l-6 6-4-4-8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
             <span class="sm">Gastos Totales</span>
           </div>
           <span id="totalExpensesMobile" class="sm red">€ 0,00</span>
         </div>
 
         <div class="mt">
-          <button id="clearBtnMobile" class="btn btn--destructive w-full">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6l1-2h6l1 2M6 6l1 14h10l1-14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <button id="clearBtnMobile" class="btn btn--destructive w-full" data-loading-target="clear-mobile">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 6h18M8 6l1-2h6l1 2M6 6l1 14h10l1-14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
             Limpiar Datos
           </button>
         </div>
       </section>
 
+      <!-- Form móvil -->
       <section class="card">
         <h3 class="h3 mb">Agregar Transacción</h3>
-        <form id="txForm" class="form">
+        <form id="txForm" class="form" novalidate>
           <label for="desc">Descripción</label>
           <input id="desc" type="text" placeholder="Ej: Salario, Compras, etc." required>
+          <div id="err-desc" class="field-error" aria-live="polite"></div>
 
           <label for="amount">Monto</label>
-          <input id="amount" type="number" step="0.01" placeholder="+ ingresos, - gastos" required>
+          <input id="amount" type="number" step="0.01" inputmode="decimal" placeholder="+ ingresos, - gastos" required>
           <p class="help">Valores positivos para ingresos, negativos para gastos</p>
+          <div id="err-amount" class="field-error" aria-live="polite"></div>
 
           <label for="date">Fecha (opcional)</label>
-          <input id="date" type="date">
+          <input id="date" type="date" max="">
+          <div id="err-date" class="field-error" aria-live="polite"></div>
 
-          <button class="btn w-full">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Agregar
+          <button class="btn w-full" data-loading-target="add-mobile">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Agregar</span>
           </button>
+          <div id="err-global-m" class="form-error-global" aria-live="assertive"></div>
         </form>
-        <!-- ... -->
-<form id="txForm" class="form" novalidate>
-  <label for="desc">Descripción</label>
-  <input id="desc" type="text" placeholder="Ej: Salario, Compras, etc." required>
-  <div id="err-desc" class="field-error" aria-live="polite"></div>
-
-  <label for="amount">Monto</label>
-  <input id="amount" type="number" step="0.01" inputmode="decimal" placeholder="+ ingresos, - gastos" required>
-  <p class="help">Valores positivos para ingresos, negativos para gastos</p>
-  <div id="err-amount" class="field-error" aria-live="polite"></div>
-
-  <label for="date">Fecha (opcional)</label>
-  <input id="date" type="date" max="">
-  <div id="err-date" class="field-error" aria-live="polite"></div>
-
-  <button class="btn w-full" data-loading-target="add-mobile">
-    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <span>Agregar</span>
-  </button>
-  <div id="err-global-m" class="form-error-global" aria-live="assertive"></div>
-</form>
-<!-- ... -->
-
-<form id="txFormDesktop" class="form" novalidate>
-  <label for="descD">Descripción</label>
-  <input id="descD" type="text" placeholder="Ej: Salario, Compras, etc." required>
-  <div id="err-descD" class="field-error" aria-live="polite"></div>
-
-  <label for="amountD">Monto</label>
-  <input id="amountD" type="number" step="0.01" inputmode="decimal" placeholder="+ ingresos, - gastos" required>
-  <p class="help">Valores positivos para ingresos, negativos para gastos</p>
-  <div id="err-amountD" class="field-error" aria-live="polite"></div>
-
-  <label for="dateD">Fecha (opcional)</label>
-  <input id="dateD" type="date" max="">
-  <div id="err-dateD" class="field-error" aria-live="polite"></div>
-
-  <button class="btn w-full" data-loading-target="add-desktop">
-    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <span>Agregar</span>
-  </button>
-  <div id="err-global-d" class="form-error-global" aria-live="assertive"></div>
-</form>
-<!-- ... -->
-
-<!-- Botones limpiar ya existen; añade data-loading-target para spinner -->
-<button id="clearBtnMobile" class="btn btn--destructive w-full" data-loading-target="clear-mobile">…</button>
-<button id="clearBtnDesktop" class="btn btn--destructive w-full" data-loading-target="clear-desktop">…</button>
-
       </section>
 
+      <!-- Historial móvil -->
       <section class="card">
         <h3 class="h3 mb">Historial</h3>
         <div id="historyMobile" class="history"></div>
@@ -138,26 +104,34 @@
     <!-- Desktop grid -->
     <section class="grid-3 lg-visible">
       <div class="col-span-2 stack">
+        <!-- Form desktop -->
         <section class="card">
           <h3 class="h3 mb">Agregar Transacción</h3>
-          <form id="txFormDesktop" class="form">
+          <form id="txFormDesktop" class="form" novalidate>
             <label for="descD">Descripción</label>
             <input id="descD" type="text" placeholder="Ej: Salario, Compras, etc." required>
+            <div id="err-descD" class="field-error" aria-live="polite"></div>
 
             <label for="amountD">Monto</label>
-            <input id="amountD" type="number" step="0.01" placeholder="+ ingresos, - gastos" required>
+            <input id="amountD" type="number" step="0.01" inputmode="decimal" placeholder="+ ingresos, - gastos" required>
             <p class="help">Valores positivos para ingresos, negativos para gastos</p>
+            <div id="err-amountD" class="field-error" aria-live="polite"></div>
 
             <label for="dateD">Fecha (opcional)</label>
-            <input id="dateD" type="date">
+            <input id="dateD" type="date" max="">
+            <div id="err-dateD" class="field-error" aria-live="polite"></div>
 
-            <button class="btn w-full">
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Agregar
+            <button class="btn w-full" data-loading-target="add-desktop">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Agregar</span>
             </button>
+            <div id="err-global-d" class="form-error-global" aria-live="assertive"></div>
           </form>
         </section>
 
+        <!-- Historial desktop -->
         <section class="card">
           <h3 class="h3 mb">Historial</h3>
           <div id="historyDesktop" class="history"></div>
@@ -165,12 +139,15 @@
         </section>
       </div>
 
+      <!-- Resumen desktop -->
       <section class="card">
         <h3 class="h3 mb">Resumen</h3>
 
         <div class="pill pill--green">
           <div class="pill__left">
-            <svg class="icon icon--green" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="icon icon--green" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 17l6-6 4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
             <span class="sm">Ingresos Totales</span>
           </div>
           <span id="totalIncomeDesktop" class="sm green">€ 0,00</span>
@@ -178,15 +155,19 @@
 
         <div class="pill pill--red">
           <div class="pill__left">
-            <svg class="icon icon--red" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 7l-6 6-4-4-8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="icon icon--red" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M21 7l-6 6-4-4-8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
             <span class="sm">Gastos Totales</span>
           </div>
           <span id="totalExpensesDesktop" class="sm red">€ 0,00</span>
         </div>
 
         <div class="mt">
-          <button id="clearBtnDesktop" class="btn btn--destructive w-full">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6l1-2h6l1 2M6 6l1 14h10l1-14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <button id="clearBtnDesktop" class="btn btn--destructive w-full" data-loading-target="clear-desktop">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 6h18M8 6l1-2h6l1 2M6 6l1 14h10l1-14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
             Limpiar Datos
           </button>
         </div>
